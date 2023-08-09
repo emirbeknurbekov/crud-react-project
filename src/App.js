@@ -23,10 +23,25 @@ const App = () => {
     // OR
     // setProducts([...products, newProduct]);
   }
+
   function getOneProduct(id) {
     let productObj = products.find((product) => product.id === id);
     setEditedProduct(productObj);
     handleEditShow();
+  }
+
+  function deleteProduct(id) {
+    let newProducts = products.filter((product) => product.id !== id);
+    setProducts(newProducts);
+  }
+
+  function saveChanges(updatedObj) {
+    let newProducts = products.map((product) => {
+      if (product.id === updatedObj.id) return updatedObj;
+      return product;
+    });
+    setProducts(newProducts);
+    handleEditClose();
   }
 
   return (
@@ -37,12 +52,17 @@ const App = () => {
         handleClose={handleClose}
         addProduct={addProduct}
       />
-      <ProductList products={products} getOneProduct={getOneProduct} />
+      <ProductList
+        products={products}
+        getOneProduct={getOneProduct}
+        deleteProduct={deleteProduct}
+      />
       {showEditModal && (
         <EditProduct
           showEditModal={showEditModal}
           handleEditClose={handleEditClose}
           editedProduct={editedProduct}
+          saveChanges={saveChanges}
         />
       )}
     </>

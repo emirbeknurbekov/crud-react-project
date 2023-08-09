@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 import { Button, Modal, FormControl } from "react-bootstrap";
 
-const EditProduct = ({ showEditModal, handleEditClose, editedProduct }) => {
+const EditProduct = ({
+  showEditModal,
+  handleEditClose,
+  editedProduct,
+  saveChanges,
+}) => {
   const [product, setProduct] = useState(editedProduct);
+
   const handleInput = (e) => {
     setProduct({ ...product, [e.target.name]: [e.target.value] });
   };
+
   function saveEditedProduct() {
-    console.log();
+    for (let key in product) {
+      if (product[key] === "") {
+        alert("Some inputs are empty");
+        return;
+      }
+    }
+    saveChanges(product);
   }
+
   return (
     <>
       {" "}
@@ -56,7 +70,11 @@ const EditProduct = ({ showEditModal, handleEditClose, editedProduct }) => {
           <Button variant="secondary" onClick={handleEditClose}>
             Close
           </Button>
-          <Button variant="dark" onClick={saveEditedProduct}>
+          <Button
+            variant="dark"
+            saveChanges={saveChanges}
+            onClick={saveEditedProduct}
+          >
             Save changes
           </Button>
         </Modal.Footer>
